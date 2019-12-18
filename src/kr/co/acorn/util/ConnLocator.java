@@ -9,7 +9,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class ConnLocator {
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
 		DataSource ds = null;
 		Connection con = null;
 		
@@ -19,9 +19,6 @@ public class ConnLocator {
 			ds = (DataSource) context.lookup("java:comp/env/jdbc/acorn");
 			con = ds.getConnection();
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

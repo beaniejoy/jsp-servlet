@@ -1,7 +1,6 @@
 package kr.co.acorn.dto;
 
 public class DeptDto {
-	// 칼럼명을 그대로 식별자로 사용하지는 말자.
 	private int no;
 	private String name;
 	private String loc;
