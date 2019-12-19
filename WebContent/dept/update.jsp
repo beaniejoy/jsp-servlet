@@ -1,22 +1,35 @@
+<%@page import="kr.co.acorn.dto.DeptDto"%>
+<%@page import="kr.co.acorn.dao.DeptDao"%>
 <%@ page pageEncoding="utf-8"%>
-<%@ include file="../inc/header.jsp"%>
-<!-- breadcrumb start -->
-<nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="/index.jsp">Home</a></li>
-		<li class="breadcrumb-item active" aria-current="page">DEPT</li>
-	</ol>
-</nav>
-<!-- breadcrumb end -->
-<!-- main start -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			
+<%
+	request.setCharacterEncoding("utf-8");
+	int no = Integer.parseInt(request.getParameter("no"));
+	String name = request.getParameter("name");
+	String loc = request.getParameter("loc");
+	String tempPage = request.getParameter("page");
 
-			
-		</div>
-	</div>
-</div>
-<!-- main end -->
-<%@ include file="../inc/footer.jsp"%>
+	DeptDao dao = DeptDao.getInstance();
+	DeptDto dto = new DeptDto(no, name, loc);
+	boolean isSuccess = dao.update(dto);
+	if (isSuccess) {
+%>
+<script>
+	alert('부서정보가 수정되었습니다.');
+	// 지정한 페이지로 redirect
+	// javascript부분에서의 sendRedirect
+	location.href = "view.jsp?page=<%=tempPage%>&no=<%=no%>";
+</script>
+<%
+	} else {
+%>
+<script>
+	alert('DB Error');
+	// 바로 직전의 페이지로 돌아간다.
+	history.back(-1);
+</script>
+<%
+	}
+%>
+<%=no%>,
+<%=name%>,
+<%=loc%>

@@ -1,22 +1,33 @@
+<%@page import="kr.co.acorn.dao.DeptDao"%>
+<%@page import="kr.co.acorn.dto.DeptDto"%>
 <%@ page pageEncoding="utf-8"%>
-<%@ include file="../inc/header.jsp"%>
-<!-- breadcrumb start -->
-<nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="/index.jsp">Home</a></li>
-		<li class="breadcrumb-item active" aria-current="page">DEPT</li>
-	</ol>
-</nav>
-<!-- breadcrumb end -->
-<!-- main start -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			
+<%
+	//request 받아올 때 항상 한글에 유의해서 깨지지않게 utf-8지정하자
+	request.setCharacterEncoding("utf-8");
+	int no = Integer.parseInt(request.getParameter("no"));
+	String name = request.getParameter("name");
+	String loc = request.getParameter("loc");
 
-			
-		</div>
-	</div>
-</div>
-<!-- main end -->
-<%@ include file="../inc/footer.jsp"%>
+	DeptDto dto = new DeptDto(no, name, loc);
+	DeptDao dao = DeptDao.getInstance();
+	boolean isSuccess = dao.insert(dto);
+	if (isSuccess) {
+%>
+<script>
+	alert("부서 등록에 성공하셨습니다.")
+	location.href = "list.jsp?page=1";
+</script>
+<%
+	} else {
+%>
+<script>
+	alert("DB Error");
+	history.back(-1);
+</script>
+<%
+	}
+%>
+
+<%=no%>,
+<%=name%>,
+<%=loc%>
