@@ -1,6 +1,6 @@
 <h2>JSP web-dev</h2>
 
-### dept 관리하기
+### - dept 관리하기
 
 list.jsp (main) --> write.jsp, view.jsp   
 
