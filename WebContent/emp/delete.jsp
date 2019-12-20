@@ -1,17 +1,17 @@
-<%@page import="kr.co.acorn.dto.DeptDto"%>
-<%@page import="kr.co.acorn.dao.DeptDao"%>
+<%@page import="kr.co.acorn.dto.EmpDto"%>
+<%@page import="kr.co.acorn.dao.EmpDao"%>
 <%@ page pageEncoding="utf-8"%>
 <%
 	request.setCharacterEncoding("utf-8");
 	int no = Integer.parseInt(request.getParameter("no"));
 	String tempPage = request.getParameter("page");
 	// delete는 부서번호만 가져오면 된다.
-	DeptDao dao = DeptDao.getInstance();
+	EmpDao dao = EmpDao.getInstance();
 	boolean isSuccess = dao.delete(no);
 	if (isSuccess) {
 %>
 <script>
-	alert('부서정보가 수정되었습니다.');
+	alert('사원정보가 삭제되었습니다.');
 	// 지정한 페이지로 redirect
 	// javascript부분에서의 sendRedirect
 	location.href = "list.jsp?page=<%=tempPage%>";

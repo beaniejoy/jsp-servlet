@@ -1,12 +1,14 @@
-<%@ page import="kr.co.acorn.dto.DeptDto"%>
+<%@page import="kr.co.acorn.dto.EmpDto"%>
+<%@page import="kr.co.acorn.dao.EmpDao"%>
+
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="kr.co.acorn.dao.DeptDao"%>
+
 <%@ page pageEncoding="utf-8"%>
 <%@ include file="../inc/header.jsp"%>
 <%
 	int start = 0;
 	int len = 5;
-	int pageLength = 2;
+	int pageLength = 3;
 	int totalRows = 0;
 	int totalPage = 0;
 	int startPage = 0;
@@ -26,7 +28,8 @@
 		cPage = 1;
 	}
 
-	DeptDao dao = DeptDao.getInstance();
+	EmpDao dao = EmpDao.getInstance();
+
 	// 총 데이터수 구하기
 	totalRows = dao.getTotalRows();
 
@@ -41,7 +44,7 @@
 	}
 	// An = a1 + (n - 1)*d
 	start = (cPage - 1) * len;
-	ArrayList<DeptDto> list = dao.select(start, len);
+	ArrayList<EmpDto> list = dao.select(start, len);
 	/*
 		가정
 		total Rows = 132;
@@ -67,6 +70,7 @@
 	if (currentBlock == totalBlock) {
 		endPage = totalPage;
 	}
+	int pageNum = totalRows - start;
 %>
 <!-- breadcrumb start -->
 <nav aria-label="breadcrumb">
@@ -92,7 +96,8 @@
 						<col width="15%">
 						<col width="15%">
 						<col width="15%">
-						<col width="30%">
+						<col width="15%">
+						<col width="15%">
 					</colgroup>
 					<thead class="thead-light">
 						<tr>
@@ -101,24 +106,38 @@
 							<th scope="col">이름</th>
 							<th scope="col">직책</th>
 							<th scope="col">사수</th>
+							<th scope="col">부서이름</th>
 							<th scope="col">입사일</th>
 						</tr>
 					</thead>
 					<tbody>
-
+						<%
+							if (list.size() != 0) {
+						%>
+						<%
+							for (EmpDto dto : list) {
+						%>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td><%=pageNum--%></td>
+							<td><a href="view.jsp?page=<%=cPage%>&no=<%=dto.getNo()%>"><%=dto.getNo()%></a></td>
+							<td><%=dto.getName()%></td>
+							<td><%=dto.getJob()%></td>
+							<td><%=dto.getMgr()%></td>
+							<td><a
+								href="../dept/view.jsp?page=<%=cPage%>&no=<%=dto.getDeptDto().getNo()%>">
+									<%=dto.getDeptDto().getName()%></a></td>
+							<td><%=dto.getHiredate()%></td>
 						</tr>
-
+						<%
+							}
+							} else {
+						%>
 						<tr>
 							<td colspan="6">데이터가 존재하지 않습니다.</td>
 						</tr>
-
+						<%
+							}
+						%>
 					</tbody>
 				</table>
 

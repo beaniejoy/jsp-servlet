@@ -12,9 +12,26 @@ public class EmpDto {
 	private int comm;
 	private DeptDto deptDto;
 
-	public EmpDto() {
+	// 생성자 Overloading 할 때 this()를 이용하자
+	public EmpDto(int no, String name, String job, int mgr, String hiredate) {
+		this(no, name, job, mgr, hiredate, 0, 0, null);
+	}
+
+	public EmpDto(int no, String name, String job, int mgr, String hiredate, DeptDto deptDto) {
+		this(no, name, job, mgr, hiredate, 0, 0, deptDto);
+	}
+
+	public EmpDto(int no, String name, String job, int mgr, String hiredate, int sal, int comm,
+			DeptDto deptDto) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.no = no;
+		this.name = name;
+		this.job = job;
+		this.mgr = mgr;
+		this.hiredate = hiredate;
+		this.sal = sal;
+		this.comm = comm;
+		this.deptDto = deptDto;
 	}
 
 	public int getNo() {
@@ -80,7 +97,5 @@ public class EmpDto {
 	public void setDeptDto(DeptDto deptDto) {
 		this.deptDto = deptDto;
 	}
-	
-	
-	
+
 }

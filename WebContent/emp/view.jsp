@@ -1,5 +1,5 @@
-<%@ page import="kr.co.acorn.dto.DeptDto"%>
-<%@ page import="kr.co.acorn.dao.DeptDao"%>
+<%@ page import="kr.co.acorn.dto.EmpDto"%>
+<%@ page import="kr.co.acorn.dao.EmpDao"%>
 <%@ page pageEncoding="utf-8"%>
 <%@ include file="../inc/header.jsp"%>
 <%
@@ -23,28 +23,34 @@
 	} catch (NumberFormatException e) {
 		cPage = 1;
 	}
-	try{
+	try {
 		no = Integer.parseInt(tempNo);
-	}catch(NumberFormatException e){
+	} catch (NumberFormatException e) {
 		// int로 바꾸는데 오류 발생시 이전페이지로 다시 돌려보냄
-		response.sendRedirect("list.jsp?page="+cPage);
+		response.sendRedirect("list.jsp?page=" + cPage);
 		// return으로 끊자.
 		return;
 	}
-	
-	DeptDao dao = DeptDao.getInstance();
+	EmpDao dao = EmpDao.getInstance();
 	//여기까지 온 것은 제대로 된 형식의 no과 cpage가 온 것이긴 하지만 
 	//no에 이상한 값이 들어갈 수도 있다.
-	DeptDto dto = dao.select(no);
+	EmpDto dto = dao.select(no);
 	//dto select하는데 이상한 no가 들어가면 dto는 null값을 반환
 	//new로 안만들어지기 때문이다.
-	if(dto == null){
-		response.sendRedirect("list.jsp?page="+cPage);
+	if (dto == null) {
+		response.sendRedirect("list.jsp?page=" + cPage);
 		return;
 	}
+
 	String name = dto.getName();
-	String loc = dto.getLoc();
+	String job = dto.getJob();
+	int mgr = dto.getMgr();
+	String hiredate = dto.getHiredate();
+	int sal = dto.getSal();
+	int comm = dto.getComm();
+	int deptNo = dto.getDeptDto().getNo();
 %>
+
 <!-- breadcrumb start -->
 <nav aria-label="breadcrumb">
 	<ol class="breadcrumb">
@@ -62,53 +68,67 @@
 				<div class="form-group row">
 					<label for="no" class="col-sm-2 col-form-label">사원번호</label>
 					<div class="col-sm-10">
-						<input type="number" class="form-control" id="no" name="no">
+						<input type="number" class="form-control" id="no"
+							readonly="readonly" value="<%=no%>" name="no">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="name" class="col-sm-2 col-form-label">이름</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="name" name="name">
+						<input type="text" class="form-control" id="name"
+							value="<%=name%>" name="name">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="job" class="col-sm-2 col-form-label">직책</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="job" name="job">
+						<input type="text" class="form-control" id="job" name="job"
+							value="<%=job%>">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="mgr" class="col-sm-2 col-form-label">사수</label>
 					<div class="col-sm-10">
-						<input type="number" class="form-control" id="mgr" name="mgr">
+						<input type="number" class="form-control" id="mgr" name="mgr"
+							value="<%=mgr%>">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="hiredate" class="col-sm-2 col-form-label">입사날짜</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" readonly="readonly"
+							id="hiredate" name="hiredate" value="<%=hiredate%>">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="sal" class="col-sm-2 col-form-label">월급</label>
 					<div class="col-sm-10">
-						<input type="number" class="form-control" id="sal" name="sal">
+						<input type="number" class="form-control" id="sal" name="sal"
+							value="<%=sal%>">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="comm" class="col-sm-2 col-form-label">상여금</label>
 					<div class="col-sm-10">
-						<input type="number" class="form-control" id="comm" name="comm">
+						<input type="number" class="form-control" id="comm" name="comm"
+							value="<%=comm%>">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="deptNo" class="col-sm-2 col-form-label">부서번호</label>
 					<div class="col-sm-10">
-						<input type="number" class="form-control" id="deptNo" name="deptNo">
+						<input type="number" class="form-control" id="deptNo"
+							name="deptNo" value="<%=deptNo%>">
 					</div>
 				</div>
 				<%-- 수정할 때 페이지도 넘겨야 한다. --%>
-				<input type="hidden" name="page" value="<%=cPage%>"/>
+				<input type="hidden" name="page" value="<%=cPage%>" />
 			</form>
 
 			<div class="text-right">
-				<a href="list.jsp?page=<%=cPage %>" class="btn btn-outline-secondary">목록</a>
-				<button type="button" id="updateEmp"
-					class="btn btn-outline-success">수정</button>
+				<button type="button" id="prevPage"
+					class="btn btn-outline-secondary">이전</button>
+				<button type="button" id="updateEmp" class="btn btn-outline-success">수정</button>
 				<button type="button" id="deleteEmp" class="btn btn-outline-danger">삭제</button>
 			</div>
 
@@ -121,13 +141,11 @@
 <script>
 	$(function() {
 		$("#name").focus();
+		$("#prevPage").click(function() {
+			history.back(-1);
+		})
 		$("#updateEmp").click(function() {
 			//자바스크립트 유효성 검사
-			if ($("#no").val().length == 0) {
-				alert("사원번호를 입력하세요.");
-				$("#no").focus();
-				return;
-			}
 			if ($("#name").val().length == 0) {
 				alert("이름을 입력하세요.");
 				$("#name").focus();
@@ -138,7 +156,6 @@
 				$("#job").focus();
 				return;
 			}
-			
 			if ($("#sal").val().length == 0) {
 				alert("월급을 입력하세요.");
 				$("#sal").focus();

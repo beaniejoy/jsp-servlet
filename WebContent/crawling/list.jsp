@@ -1,19 +1,22 @@
-<%@ page import="kr.co.acorn.dto.DeptDto"%>
+<%@ page import="kr.co.acorn.crawling.CrawlingData"%>
+<%@ page import="kr.co.acorn.dto.CrawlingDto"%>
+<%@ page import="kr.co.acorn.dao.CrawlingDao"%>
+
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="kr.co.acorn.dao.DeptDao"%>
+
 <%@ page pageEncoding="utf-8"%>
 <%@ include file="../inc/header.jsp"%>
 <%
 	int start = 0;
-	int len = 5;
-	int pageLength = 2;
+	int len = 50;
+	int pageLength = 10;
 	int totalRows = 0;
 	int totalPage = 0;
 	int startPage = 0;
 	int endPage = 0;
 	int cPage = 0;
 	String tempPage = request.getParameter("page");
-	
+
 	// 항상 예외처리 중요시 하자
 	// 쿼리에 page 값이 아예 없는 경우
 	if (tempPage == null || tempPage.length() == 0) {
@@ -25,23 +28,26 @@
 	} catch (NumberFormatException e) {
 		cPage = 1;
 	}
-	
-	DeptDao dao = DeptDao.getInstance();
+
+	// CrawlingData.dataUpdate();
+	CrawlingDao dao = CrawlingDao.getInstance();
+
 	// 총 데이터수 구하기
-	totalRows = dao.getTotalRows();		
-	// 총 페이지 수 구하기
+	totalRows = dao.getTotalRows();
+
 	totalPage = totalRows % len == 0 ? totalRows / len : totalRows / len + 1;
 	// totalRows가 0일 때 문제 발생
 	if (totalPage == 0) {
 		totalPage = 1;
 	}
-	
-	if(cPage > totalPage){
+
+	if (cPage > totalPage) {
 		cPage = 1;
 	}
 	// An = a1 + (n - 1)*d
 	start = (cPage - 1) * len;
-	ArrayList<DeptDto> list = dao.select(start, len);
+
+	ArrayList<CrawlingDto> list = dao.select(start, len);
 	/*
 		가정
 		total Rows = 132;
@@ -62,8 +68,10 @@
 			: (cPage / pageLength + 1);
 	int totalBlock = totalPage % pageLength == 0 ? (totalPage / pageLength)
 			: (totalPage / pageLength + 1);
+
 	startPage = 1 + (currentBlock - 1) * pageLength;
 	endPage = pageLength + (currentBlock - 1) * pageLength;
+
 	if (currentBlock == totalBlock) {
 		endPage = totalPage;
 	}
@@ -81,24 +89,37 @@
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12">
-			<h3>
-				부서리스트 (총 데이터 개수:
-				<%=totalRows%>)
-			</h3>
-			<div class = "table-responsive">
+			<h3>Crawling</h3>
+			<select name="year">
+				<option value="" selected>--연도선택--</option>
+				<%
+					for (int i = 2019; i >= 2010; i--) {
+				%>
+				<option value="<%=i%>"><%=i %></option>
+				<%
+					}
+				%>
+			</select>
+			<div class="table-responsive">
 				<table class="table">
 					<colgroup>
+						<col width="16%">
 						<col width="10%">
-						<col width="20%">
-						<col width="50%">
-						<col width="20%">
+						<col width="10%">
+						<col width="10%">
+						<col width="10%">
+						<col width="23%">
+						<col width="21%">
 					</colgroup>
 					<thead class="thead-light">
 						<tr>
-							<th scope="col">#</th>
-							<th scope="col">부서번호</th>
-							<th scope="col">부서이름</th>
-							<th scope="col">부서위치</th>
+							<th scope="col">Date</th>
+							<th scope="col">Open</th>
+							<th scope="col">High</th>
+							<th scope="col">Low</th>
+							<th scope="col">Close</th>
+							<th scope="col">Volume</th>
+							<th scope="col">Market Cap</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -106,63 +127,71 @@
 							if (list.size() != 0) {
 						%>
 						<%
-							for (DeptDto dto : list) {
+							for (CrawlingDto dto : list) {
 						%>
 						<tr>
-							<td><%=pageNum--%></td>
-							<td><a href="view.jsp?page=<%=cPage%>&no=<%=dto.getNo()%>"><%=dto.getNo()%></a></td>
-							<td><%=dto.getName()%></td>
-							<td><%=dto.getLoc()%></td>
+							<td><%=dto.getDate()%></td>
+							<td><%=dto.getOpen()%></td>
+							<td><%=dto.getHigh()%></td>
+							<td><%=dto.getLow()%></td>
+							<td><%=dto.getClose()%></td>
+							<td><%=dto.getVolume()%></td>
+							<td><%=dto.getMarketCap()%></td>
 						</tr>
 						<%
 							}
-						%>
-						<%
 							} else {
 						%>
 						<tr>
-							<td colspan="3">데이터가 존재하지 않습니다.</td>
+							<td colspan="6">데이터가 존재하지 않습니다.</td>
 						</tr>
 						<%
 							}
 						%>
+
 					</tbody>
-				</table>				
-			
-			</div>
-			
-			<nav aria-label="Page navigation example">
-					<ul class="pagination justify-content-center">
-						<%if (currentBlock == 1) {%> 
-						<li class="page-item disabled">
-							<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous </a>
-						</li>
-						<%} else {%> 
-						<li class="page-item">
-							<a class="page-link" href="list.jsp?page=<%=startPage - 1%>">Previous</a> 
-						</li>
-						<%} %>
-						<%	for (int i = startPage; i <= endPage; i++) {%>
-						<li class="page-item <%if(cPage == i){ %>active<%} %>"><a class="page-link"
-							href="list.jsp?page=<%=i%>"><%=i%></a></li>
-						<%} %>
-						<%if (currentBlock == totalBlock) {%> 
-						<li class="page-item disabled">
-							<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>  	
-						</li>
-						<%} else {%>
-						<li class="page-item">
-							<a class="page-link" href="list.jsp?page=<%=endPage + 1%>">Next</a>
-						</li>
-						<%} %>
-					</ul>
-				</nav>
-			
-			<div class="text-right">
-				<!-- 하이퍼링크로 해도 상관 없다. (a tag) -->
-				<a href="write.jsp?page=<%=cPage %>" class="btn btn-outline-secondary">부서등록</a>
+				</table>
+
 			</div>
 
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<%
+						if (currentBlock == 1) {
+					%>
+					<li class="page-item disabled"><a class="page-link" href="#"
+						tabindex="-1" aria-disabled="true">Previous </a></li>
+					<%
+						} else {
+					%>
+					<li class="page-item"><a class="page-link"
+						href="list.jsp?page=<%=startPage - 1%>">Previous</a></li>
+					<%
+						}
+					%>
+					<%
+						for (int i = startPage; i <= endPage; i++) {
+					%>
+					<li class="page-item <%if (cPage == i) {%>active<%}%>"><a
+						class="page-link" href="list.jsp?page=<%=i%>"><%=i%></a></li>
+					<%
+						}
+					%>
+					<%
+						if (currentBlock == totalBlock) {
+					%>
+					<li class="page-item disabled"><a class="page-link" href="#"
+						tabindex="-1" aria-disabled="true">Next</a></li>
+					<%
+						} else {
+					%>
+					<li class="page-item"><a class="page-link"
+						href="list.jsp?page=<%=endPage + 1%>">Next</a></li>
+					<%
+						}
+					%>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>

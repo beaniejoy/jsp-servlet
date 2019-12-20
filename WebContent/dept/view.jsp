@@ -86,7 +86,7 @@
 			</form>
 
 			<div class="text-right">
-				<a href="list.jsp?page=<%=cPage %>" class="btn btn-outline-secondary">목록</a>
+				<button type="button" id="prevPage" class="btn btn-outline-secondary">이전</button>
 				<button type="button" id="updateDept"
 					class="btn btn-outline-success">수정</button>
 				<button type="button" id="deleteDept" class="btn btn-outline-danger">삭제</button>
@@ -101,6 +101,10 @@
 <script>
 	$(function() {
 		$("#name").focus();
+		$("#prevPage").click(function() {
+			// 이전페이지 한번만 가라 -2하면 2번 이전의 페이지
+			history.back(-1);
+		})
 		$("#updateDept").click(function() {
 			//자바스크립트 유효성 검사
 			if ($("#no").val().length == 0) {

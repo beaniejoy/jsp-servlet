@@ -35,13 +35,20 @@
 		%>
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item <%if(uri.startsWith("/dept")){ %>active<%} %>"><a class="nav-link" href="/dept/list.jsp">부서관리
+				<li class="nav-item <%if(uri.startsWith("/dept")){ %>active<%} %>">
+				<a class="nav-link" href="/dept/list.jsp">부서관리
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item <%if(uri.startsWith("/emp")){ %>active<%} %>"><a class="nav-link" href="/emp/list.jsp">사원관리
+				<li class="nav-item <%if(uri.startsWith("/emp")){ %>active<%} %>">
+				<a class="nav-link" href="/emp/list.jsp">사원관리
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item <%if(uri.startsWith("/notice")){ %>active<%} %>"><a class="nav-link" href="/notice">공지사항</a></li>
+				<li class="nav-item <%if(uri.startsWith("/crawling")){ %>active<%} %>">
+				<a class="nav-link" href="/crawling/list.jsp">크롤링
+						<span class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item <%if(uri.startsWith("/notice")){ %>active<%} %>">
+				<a class="nav-link" href="/notice">공지사항</a></li>
 			</ul>
 			<form class="form-inline my-2 my-lg-0">
 				<input class="form-control mr-sm-2" type="search"

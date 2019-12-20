@@ -27,12 +27,14 @@
 		<div class="col-lg-12">
 			<h3>사원등록</h3>
 			<form name="f" method="post" action="save.jsp">
+				<%--
 				<div class="form-group row">
 					<label for="no" class="col-sm-2 col-form-label">사원번호</label>
 					<div class="col-sm-10">
 						<input type="number" class="form-control" id="no" name="no">
 					</div>
 				</div>
+				--%>
 				<div class="form-group row">
 					<label for="name" class="col-sm-2 col-form-label">이름</label>
 					<div class="col-sm-10">
@@ -87,11 +89,12 @@
 		$("#no").focus();
 		$("#saveEmp").click(function() {
 			//자바스크립트 유효성 검사
+			/*
 			if ($("#no").val().length == 0) {
 				alert("사원번호를 입력하세요.");
 				$("#no").focus();
 				return;
-			}
+			}*/
 			if ($("#name").val().length == 0) {
 				alert("이름을 입력하세요.");
 				$("#name").focus();
