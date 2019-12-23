@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class KoreanDate {
+public class DateFormChange {
 	
 	public static String changeDate(String us){
 		String changeDate = null;
@@ -13,17 +13,16 @@ public class KoreanDate {
 		SimpleDateFormat in = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
 		SimpleDateFormat out = new SimpleDateFormat("yyyy-MM-dd");
 		try {
+			// String => Date
+			// 지정한 Date Form대로 y,m,d 나눠서 Date로 parsing하겠다.
 			Date usDate = in.parse(us);
-			System.out.println(usDate);
+			
+			// Date => String
 			changeDate = out.format(usDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return changeDate;
-	}
-	public static void main(String[] args) {
-		String date = changeDate("Jul 28, 2018");
-		System.out.println(date);
 	}
 }
