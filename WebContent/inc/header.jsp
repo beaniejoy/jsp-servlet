@@ -1,3 +1,4 @@
+<%@page import="kr.co.acorn.dto.MemberDto"%>
 <%@ page pageEncoding="utf-8"%>
 
 <!doctype html>
@@ -47,14 +48,29 @@
 				<a class="nav-link" href="/crawling/list.jsp">크롤링
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item <%if(uri.startsWith("/notice")){ %>active<%} %>">
-				<a class="nav-link" href="/notice">공지사항</a></li>
+				<li class="nav-item <%if(uri.startsWith("/member")){ %>active<%} %>">
+				<a class="nav-link" href="/member/list.jsp">회원관리</a></li>
+				
+				<li class="nav-item <%if(uri.startsWith("/file")){ %>active<%} %>">
+				<a class="nav-link" href="/file/index.jsp">파일업로드</a></li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="search"
-					placeholder="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
+			<ul class="navbar-nav">
+			<%
+				// include 했기 때문에 변수 충돌이 일어남(check_login.jsp의 변수와 충돌)
+				MemberDto memberDto = (MemberDto)session.getAttribute("member");
+				if(memberDto == null){
+			%>
+				<li class="nav-item">
+					<a class="nav-link" href="/member/write.jsp">회원가입</a></li>
+				<li class="nav-item">
+					<a class="nav-link" href="/member/login.jsp">로그인</a></li>
+			<%} else{%>
+				<li class="nav-item">
+					<a class="nav-link" href="#"><%=memberDto.getName() %>님 환영합니다.</a></li>
+				<li class="nav-item <%if(uri.startsWith("/notice")){ %>active<%} %>">
+					<a class="nav-link" href="/member/logout.jsp">로그아웃</a></li>
+			<%} %>
+			</ul>
 		</div>
 	</nav>
 	<!-- navbar end -->

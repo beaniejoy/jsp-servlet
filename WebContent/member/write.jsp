@@ -79,8 +79,11 @@
 
 			<div class="text-right">
 				<a href="list.jsp?page=<%=cPage%>" class="btn btn-outline-secondary">목록</a>
+				<%-- 로그인 했을 때는 저장 못하게 안보이게 설정 --%>
+				<% if(memberDto == null){ %>
 				<button type="button" id="saveMember"
 					class="btn btn-outline-success">저장</button>
+				<%} %>
 			</div>
 
 		</div>

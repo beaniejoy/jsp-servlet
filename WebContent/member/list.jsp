@@ -171,7 +171,7 @@
 			<div class="text-right">
 				<!-- 하이퍼링크로 해도 상관 없다. (a tag) -->
 				<a href="write.jsp?page=<%=cPage%>"
-					class="btn btn-outline-secondary">사원등록</a>
+					class="btn btn-outline-secondary">회원가입</a>
 			</div>
 
 		</div>
