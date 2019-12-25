@@ -4,7 +4,7 @@
 <footer class="bg-dark bd-footer "
 	style="color: white; padding: 1em; margin-top: 1em;">
 	<div class="container-fluid text-center">
-		<p>Since 2019-12-13</p>
+		<p>Since 2019-12-13</p> 
 	</div>
 </footer>
 <!-- footer end -->
