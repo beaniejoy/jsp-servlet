@@ -14,7 +14,7 @@
 	if (isSuccess) {
 %>
 <script>
-	alert("부서 등록에 성공하셨습니다.")
+	alert("부서 등록에 성공하셨습니다.");
 	location.href = "list.jsp?page=1";
 </script>
 <%
